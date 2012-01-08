@@ -5,7 +5,8 @@
 ;; _[http://www.code-story.net/](http://www.code-story.net/) presents a little challenge called foobarqix. It's the first phase to select a pair of programmers that will be part of the team led by David and Jean-Laurent at devoxx (april 2012)._
 ;; The following code is not a submission.
 ;; Instead a clojure solution (from an apprentice) written with simplicity in mind. I hope it may teach a little to newbies.
-;; Feedbacks very welcome.
+;; Feedbacks very welcome
+;; (@stephane_tavera on twitter)
 
 ;; # Rules
 ;; They are declared only once here. The data structure used is a map.
