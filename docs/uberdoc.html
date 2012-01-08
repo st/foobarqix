@@ -2560,7 +2560,7 @@ From <code>(doc mapcat)</code> : Returns the result of applying concat to the re
     [x (apply str accu (mapcat rules (to-ints x)))])</pre></tr><tr><td class="docs"><p>In case (very likely) where previous documentation was unclear, have a look at unit tests !</p>
 </td><td class="codes" /></tr><tr><td class="docs"><h1>div</h1>
 
-<p>This function applies the rules about the divisibility.
+<p>This function applies the rules about the divisibility. 
 The functions corresponding to each number (3, 5 and 7) are actually produced by <code>div</code>.
 A function that returns another function ? Welcome to the Clojure world. When a function outputs not a value but another function, we talk about a <code>higher-order</code> function.
 The function returned is itself straightforward as it appends to <code>accu</code> only if the predicate (= 0 (rem x n)) is satisfied.</p>
