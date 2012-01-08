@@ -2529,30 +2529,57 @@ $(document).ready(function() {
 </script><title>foobarqix -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">foobarqix</h1><h2 class="project-version">1.0.0-SNAPSHOT</h2><br /><p>Foobarqix in clojure</p>
 </div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.2.1</td></tr></table></div><div class="dependencies"><h3>dev dependencies</h3><table><tr><td class="dep-name">lein-marginalia</td><td class="dotted"><hr /></td><td class="dep-version">0.6.0</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#foobarqix.core">foobarqix.core</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#foobarqix.core" name="foobarqix.core"><h1 class="project-name">foobarqix.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes" /><pre class="brush: clojure">(ns foobarqix.core)</pre></tr><tr><td class="docs"><h2>Foobarqix in Clojure</h2>
-
-<p>Work In Progress... !
-A simple solution (from a Clojure newbye) written with explicitness in mind. So that it may teach a little to someone without any Clojure knowledge.</p>
+</td><td class="codes" /></tr><tr><td class="docs"><p><em><a href="http://www.code-story.net/">http://www.code-story.net/</a> presents a little challenge called foobarqix. It's the first phase to select a pair of programmers that will be part of the team led by David and Jean-Laurent at devoxx (april 2012).</em>
+The following code is not a submission.
+Instead a clojure solution (from an apprentice) written with simplicity in mind. I hope it may teach a little to newbies.
+Feedbacks very welcome.</p>
 </td><td class="codes" /></tr><tr><td class="docs"><h1>Rules</h1>
 
 <p>They are declared only once here. The data structure used is a map.
-This map simply associates the 'key' 7 to the value 'Quix', etc...</p>
+This map simply associates the 'key' 7 to the value 'Qix', 5 to 'Bar' etc...</p>
 </td><td class="codes" /><pre class="brush: clojure">(def rules 	
-	{7 &quot;Qix&quot; 5 &quot;Bar&quot; 3 &quot;Foo&quot;})</pre></tr><tr><td class="docs"><p>A function that returns another function ? Welcome to the Clojure world. In that case, it means that this function 'div' will output not a value but another function.</p>
+	{7 &quot;Qix&quot; 5 &quot;Bar&quot; 3 &quot;Foo&quot;})</pre></tr><tr><td class="docs"><h1>to-ints</h1>
 
-<h1>Higher order functions ?</h1>
+<p>Convenience function returning the sequence of digits.
+Let's explain this function from inside to outside.We build a string with x (we are expecting x to be a number) thanks to (str x). We then take the sequence of characters with seq. And we substract 48 to the int value for each element.
+(The magic number 48 corresponds to the code of '0'.)</p>
+</td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes" /><pre class="brush: clojure">(defn to-ints 
+	[x]
+    (map #(- (int %) 48) (seq (str x))))</pre></tr><tr><td class="docs"><h1>has</h1>
+
+<p>This function applies the rule about presence of a digit.
+First thing to note, the parameter is <em>destructured</em> in a vector with 2 parts : <code>x</code> and <code>accu</code>.
+That simply means that the call with [123 "Nothing"] will bind x with 123 and accu with "Nothing".</p>
+</td><td class="codes" /></tr><tr><td class="docs"><p>We take advantage of the fact that a map <code>m</code> is also a function where (= value (m key)) and (nil? (m not-a-key)) for each key, value of <code>m</code>.
+For example, (rules 2) returns nil, as (rules 5) returns Bar.
+<code>to-ints</code> retrieves the list of digits <code>x</code>. For each digit we apply the <code>rules</code> map (remember it's also a function) thanks to <code>mapcat</code>. 
+From <code>(doc mapcat)</code> : Returns the result of applying concat to the result of applying map to f and colls.  Thus function f should return a collection.</p>
+</td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes" /><pre class="brush: clojure">(defn has [[x accu]]
+    [x (apply str accu (mapcat rules (to-ints x)))])</pre></tr><tr><td class="docs"><p>In case (very likely) where previous documentation was unclear, have a look at unit tests !</p>
+</td><td class="codes" /></tr><tr><td class="docs"><h1>div</h1>
+
+<p>This function applies the rules about the divisibility.
+The functions corresponding to each number (3, 5 and 7) are actually produced by <code>div</code>.
+A function that returns another function ? Welcome to the Clojure world. When a function outputs not a value but another function, we talk about a <code>higher-order</code> function.
+The function returned is itself straightforward as it appends to <code>accu</code> only if the predicate (= 0 (rem x n)) is satisfied.</p>
 </td><td class="codes" /><pre class="brush: clojure">(defn div 
 	[[n s]]
     (fn [[x accu]]
-        [x (str accu (when (= 0 (rem x n)) s))]))        </pre></tr><tr><td class="docs"><p>Convenience function returning the sequence of digits. The magic number 48 corresponds to the code of '0'. Let's explain this function from inside to outside.We build a string with x thanks to (str x). Then we take the sequence of characters with seq. We then apply a function (substract 48 to the int value) for each element.</p>
-</td><td class="codes" /><pre class="brush: clojure">(defn to-ints 
-	[x]
-    (map #(- (int %) 48) (seq (str x))))</pre></tr><tr><td class="docs">
-</td><td class="codes" /><pre class="brush: clojure">(defn has [[x accu]]
-    [x (apply str accu (mapcat rules (to-ints x)))])</pre></tr><tr><td class="docs">
-</td><td class="codes" /><pre class="brush: clojure">(def all (cons has (map div (seq rules))))</pre></tr><tr><td class="docs">
+        [x (str accu (when (= 0 (rem x n)) s))]))        </pre></tr><tr><td class="docs"><h1>all</h1>
+
+<p>The functions <code>has</code> and <code>div</code> ones (one div function per rule entry) are just assembled in <code>all</code>. 
+So <code>all</code> will compute the foobarqix rules for a given number.</p>
+</td><td class="codes" /><pre class="brush: clojure">(def all (cons has (map div (seq rules))))</pre></tr><tr><td class="docs"><h1>fbq</h1>
+
+<p>The function <code>all</code> is applied to the pair [n nil] for a given <code>n</code>. nil is the initial value taken for <code>accu</code>.
+If accu contains something ((seq accu) is true) we return it else n is returned.</p>
 </td><td class="codes" /><pre class="brush: clojure">(defn fbq [n]
-    (let [[n s] ((apply comp all) [n nil])]
-            (if (seq s) s n)))</pre></tr><tr><td class="docs">
+    (let [[n accu] ((apply comp all) [n nil])]
+            (if (seq accu) accu n)))</pre></tr><tr><td class="docs"><h1>print-fbq-1-100</h1>
+
+<p>We loop through the numbers of the range 1 to 100, and for each the <code>fbq</code> is computed.</p>
 </td><td class="codes" /><pre class="brush: clojure">(defn print-fbq-1-100 
 	[]
 	(doseq [i (range 1 101)]
