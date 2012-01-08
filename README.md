@@ -13,5 +13,4 @@ Feedbacks very welcome.
 
 Copyright (C) 2012 Batman.
 
-
 Distributed under the Eclipse Public License, the same as Clojure.
